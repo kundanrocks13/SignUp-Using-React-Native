@@ -51,7 +51,6 @@ class SecondScreen extends React.Component {
 
     render() {
       const { handleSubmit, reset } = this.props;
-      //const { navigate } = this.props.navigate
         let { pickedImage } = this.state;
       return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
