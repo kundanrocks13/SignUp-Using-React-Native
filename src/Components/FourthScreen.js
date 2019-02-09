@@ -89,21 +89,22 @@ class FourthScreen extends Component {
     return (
       <Container>
         <Content padder>
-        <View>
+        <View style={styles.text}>
           <Text>First Name: {this.state.name}</Text>
           <Text>Last Name: {this.state.Lname}</Text>
           <Text>Address: {this.state.add}</Text>
           <Text>City: {this.state.city}</Text>
           <Text>State: {this.state.state}</Text>
           <Text>Email: {this.state.email}</Text>
-          </View>
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        </View>
+          <View style={styles.image}>
           <Image source={{ uri: pickedImage }} style={styles.container} />
-          
-          <Button block primary onPress={handleSubmit(this.formSubmit)}>
+          </View>
+          <View>
+          <Button style={styles.button} block primary onPress={handleSubmit(this.formSubmit)}>
             <Text>Final Submit</Text>
           </Button>
-          </View>
+        </View>
         </Content>
       </Container>
     )
@@ -114,10 +115,22 @@ export default reduxForm({
 })(FourthScreen)
 
 const styles = StyleSheet.create({
+  text:{
+    fontSize:15,
+    marginTop:20, 
+    marginBottom:20
+  },
+  image:{
+    alignItems:'center',
+    borderRadius:5,
+    marginBottom:20,
+  },
   container: {
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    width: 300,
-    height: 300
+    width: 250, 
+    height: 250
+  },
+  button:{
+    width:'50%', 
+    borderRadius:5, 
   }
 })

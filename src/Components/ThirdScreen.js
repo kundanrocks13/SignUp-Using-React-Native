@@ -1,6 +1,6 @@
 import React , { Component } from 'react';
 import Expo from 'expo';
-import { View, AsyncStorage } from 'react-native';
+import { View, AsyncStorage, StyleSheet } from 'react-native';
 import { Container, Item, Input, Header, Body, Content, Title, Button, Text } from 'native-base';
 import { Field,reduxForm } from 'redux-form';
 
@@ -28,30 +28,31 @@ class ThirdScreen extends Component {
       const pass = JSON.stringify(values.pass);
       const confPass = JSON.stringify(values.confPass);
 
-      // let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
-              //  /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/
-
-      // if(reg.test(email) === false)
-      //   {
-      //   alert("Email is Not Correct");
-      //   return false;
-      //   }
-
+      var mailRegx = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      var passRegx =  /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+      // var passRegx =  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
+      
       if(email === undefined || pass === undefined || confPass === undefined )
         {
           alert("All fields are Required")
         }
         else
         {
-          if(!email.includes('@'))
-          alert("Invalid Email Id")
-          
+
+          if(mailRegx.test(JSON.parse(email)) && passRegx.test(JSON.parse(pass))){
+            if(pass===confPass){
+              AsyncStorage.setItem('email',email);
+              AsyncStorage.setItem('pass',pass);
+      
+              this.props.navigation.navigate('Submit')
+            }
+            else{
+              alert('Miss match password')
+            }
+          }
           else
           {
-            AsyncStorage.setItem('email',email);
-            AsyncStorage.setItem('pass',pass);
-    
-            this.props.navigation.navigate('Submit')
+            alert("Invalid Email or Password")
           }
         }
     }
@@ -75,16 +76,13 @@ class ThirdScreen extends Component {
     }
     return (
       <Container>
-        <Content padder>
+        <Content padder> 
           <Field name="email" type="email" component={this.renderInput} placeholder="Email" />
           <Field name="pass" type="password" component={this.renderInput} placeholder="Password" />
           <Field name="confPass" type="password" component={this.renderInput} placeholder="Confirm Password" />
-          <Button block primary onPress={handleSubmit(this.formSubmit)} >
+          <Button style={styles.button} block primary onPress={handleSubmit(this.formSubmit)} >
             <Text>Next</Text>
           </Button>
-          {/* <Button type="submit" block primary onPress={this.mit}>
-            <Text>show</Text>
-          </Button> */}
         </Content>
       </Container>
     )
@@ -94,3 +92,11 @@ export default reduxForm({
   form: 'test',
  // validate
 })(ThirdScreen)
+
+const styles = StyleSheet.create ({
+  button:{
+    width:'50%', 
+    borderRadius:5, 
+    marginTop:20
+  }
+})

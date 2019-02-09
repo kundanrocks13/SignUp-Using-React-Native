@@ -53,13 +53,13 @@ class SecondScreen extends React.Component {
       const { handleSubmit, reset } = this.props;
         let { pickedImage } = this.state;
       return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <View>
-          <Text>Upload Your Image</Text>
+        <View style={styles.mainView}>
+          <View>
+            <Text style={styles.text}>Upload Your Image</Text>
           </View>
-          <View style={styles.container} >
+          <View style={styles.button} >
           <Button
-            title="Upload"
+            title="Upload Image"
             onPress={this.uploadImage}
           />
           </View>
@@ -67,8 +67,8 @@ class SecondScreen extends React.Component {
           {pickedImage &&
           <Image source={{ uri: pickedImage }} style={{ width: 200, height: 200}} />}
            </View>
-           <View style={styles.container} >
-          <Button  title="Next" block primary onPress={this.formSubmit} />
+           <View style={styles.button}>
+          <Button title="Next" block primary onPress={this.formSubmit} />
           </View>
         </View>
       );
@@ -122,9 +122,23 @@ const RootStack = createStackNavigator(
   }
 
   const styles = StyleSheet.create({
+    mainView:{
+      flex: 1, 
+      alignItems: 'center'
+    },
     container: {
-      paddingHorizontal: 10,
-      paddingVertical: 10,
-      width: 200
+      alignItems:'center',
+      marginTop:20,
+      borderRadius:5,
+      marginBottom:20    },
+    button:{
+      width:'50%', 
+      borderRadius:5, 
+    },
+    text:{
+      color:'red', 
+      fontSize:17, 
+      marginTop:20, 
+      marginBottom:20
     }
   })

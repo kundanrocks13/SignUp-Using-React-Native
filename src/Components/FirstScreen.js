@@ -1,6 +1,6 @@
 import React , { Component } from 'react';
 import Expo from 'expo';
-import { View, AsyncStorage } from 'react-native';
+import { View, AsyncStorage, StyleSheet } from 'react-native';
 import { Container, Item, Input, Header, Body, Content, Title, Button, Text } from 'native-base';
 import { Field, reduxForm  } from 'redux-form';
 import { Dropdown } from 'react-native-material-dropdown';
@@ -36,23 +36,35 @@ class FirstScreen extends Component {
         const add = JSON.stringify(values.address);
         const city = JSON.stringify(values.city);
         const state = JSON.stringify(values.state);
+        var nameRegx = /^[A-Za-z]{3,}$/
+        var addRegx =  /^[A-Za-z\d]{8,}$/
+      
         if(name === undefined || add === undefined || city === undefined || state === undefined )
         {
           alert("All fields are Required")
         }
         else
         {
-          if(name.length <= 4 )
-          alert("Name is too short")
-          
+
+          if(nameRegx.test(JSON.parse(name)) && nameRegx.test(JSON.parse(Lname)))
+          {
+            if(nameRegx.test(JSON.parse(city)) && nameRegx.test(JSON.parse(state)) && addRegx.test(JSON.parse(add)) )
+            {
+              AsyncStorage.setItem('name',name);
+              AsyncStorage.setItem('Lname',Lname);
+              AsyncStorage.setItem('add',add);
+              AsyncStorage.setItem('city',city);
+              AsyncStorage.setItem('state',state);
+              this.props.navigation.navigate('ImageUpload')
+            }
+            else
+            {
+              alert("Invalid Address, City or State") 
+            }
+          }
           else
           {
-            AsyncStorage.setItem('name',name);
-            AsyncStorage.setItem('Lname',Lname);
-            AsyncStorage.setItem('add',add);
-            AsyncStorage.setItem('city',city);
-            AsyncStorage.setItem('state',state);
-            this.props.navigation.navigate('ImageUpload')
+            alert("Invalid name") 
           }
         }
     }
@@ -64,7 +76,7 @@ class FirstScreen extends Component {
     }
     return( 
       <Item error= {hasError}>
-        <Input {...input} placeholder={placeholder}/>
+        <Input style={styles.text} {...input} placeholder={placeholder}/>
         {hasError ? <Text>{error}</Text> : <Text />}
       </Item>
     )
@@ -97,25 +109,29 @@ class FirstScreen extends Component {
     return (
       
       <Container>
-        <Header>
-          <Body>
+        <Header style={styles.header}>
+          <Body style={styles.body}>
             <Title>Signup</Title>
           </Body>
         </Header>
+  
         <Content padder>
-          <Field name="first_name" type="text" component={this.renderInput} placeholder="First Name" />
-          <Field name="last_name" type="text" component={this.renderInput} placeholder="Last Name"  />
-          <Field name="address" component={this.renderInput} placeholder="address"  />
-          <Field name="city" component={this.renderInput} placeholder="city" />
-          <Field name="state" component={this.renderInput} placeholder="state"  />
+        
+            <Field name="first_name" type="text" component={this.renderInput} placeholder="First Name" />
+            <Field name="last_name" type="text" component={this.renderInput} placeholder="Last Name"  />
+            <Field name="address" component={this.renderInput} placeholder="address"  />
+            <Field name="city" component={this.renderInput} placeholder="city" />
+            <Field name="state" component={this.renderInput} placeholder="state"  />
+         
           <Dropdown
                 label='Select Country'
                 data={data}
             />
-          <Button type="submit" block primary onPress={handleSubmit(this.formSubmit)}>
+          <Button style={styles.button} type="submit" block primary onPress={handleSubmit(this.formSubmit)}>
             <Text>Next</Text>
           </Button>
         </Content>
+        
       </Container>
       
     )
@@ -125,3 +141,20 @@ export default reduxForm({
   form: 'test',
  // validate
 })(FirstScreen)
+
+const styles = StyleSheet.create ({
+  text:{
+    color:'blue'
+  },
+  header:{
+    marginTop:20
+  },
+  body:{
+    alignItems:'center'
+  },
+  button:{
+    width:'50%', 
+    borderRadius:5, 
+    marginTop:10
+  }
+})
