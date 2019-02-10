@@ -1,10 +1,13 @@
 import React , { Component } from 'react';
-import Expo from 'expo';
+import* as Expo from 'expo';
 import { View, AsyncStorage, StyleSheet, Picker } from 'react-native';
 import { Container, Item, Input, Header, Body, Content, Title, Button, Text } from 'native-base';
 import { Field, reduxForm  } from 'redux-form';
 import { Dropdown } from 'react-native-material-dropdown';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { connect } from 'react-redux';
+//import store from '../Reducers';
+//import store from './Reducers/index.js'
 
 class FirstScreen extends Component {
   static navigationOptions =
@@ -38,7 +41,7 @@ class FirstScreen extends Component {
         const city = JSON.stringify(values.city);
         const state = JSON.stringify(values.state);
         var nameRegx = /^[A-Za-z ]{3,}$/
-        var addRegx =  /^[A-Za-z\d ]{5,}$/
+        var addRegx =  /^[A-Za-z\d ,-]{5,}$/
       
         if(name === undefined || add === undefined || city === undefined || state === undefined || this.state.country === "" )
         {
@@ -71,21 +74,23 @@ class FirstScreen extends Component {
         }
     }
 
-    renderInput = ({ input, placeholder, label, type, meta: { touched, error, warning } }) => {
-    var hasError= false;
-    if(error !== undefined){
-      hasError= true;
-    }
+  renderInput = ({ input, placeholder, label, type, meta: { touched, error, warning } }) => {
+    // var hasError= false;
+    // if(error !== undefined){
+    //   hasError= true;
+    // }
     return( 
-      <Item error= {hasError}>
-        <Input style={styles.text} {...input} placeholder={placeholder}/>
-        {hasError ? <Text>{error}</Text> : <Text />}
+      <Item>
+        <Text style={styles.textMain}>{label}</Text>
+        <Input style={styles.text} {...input} />
+        {/* {hasError ? <Text>{error}</Text> : <Text />} */}
       </Item>
     )
   }
 
   render(){
      const { handleSubmit, reset } = this.props;
+     //console.log(this.props)
      if (!this.state.isReady) {
       return <Expo.AppLoading />;
     }
@@ -101,16 +106,16 @@ class FirstScreen extends Component {
   
         <Content padder>
         
-            <Field name="first_name" type="text" component={this.renderInput} placeholder="First Name" />
-            <Field name="last_name" type="text" component={this.renderInput} placeholder="Last Name"  />
-            <Field name="address" component={this.renderInput} placeholder="address"  />
-            <Field name="city" component={this.renderInput} placeholder="city" />
-            <Field name="state" component={this.renderInput} placeholder="state"  />
+            <Field name="first_name" component={this.renderInput} label="First Name" />
+            <Field name="last_name" component={this.renderInput} label="Last Name" />
+            <Field name="address" component={this.renderInput} label="address"  />
+            <Field name="city" component={this.renderInput} label="city" />
+            <Field name="state" component={this.renderInput} label="state"  />
          
           <Picker
               selectedValue={this.state.country}
-              style={{ height: 40, margin:8 }}
-              itemStyle={{height: 44, color:'blue'}}
+              style={styles.picker}
+              itemStyle={{height: 44}}
               onValueChange={(itemValue, itemIndex) => this.setState({country: itemValue})}>
               <Picker.Item label="Select Country" value="" />
               <Picker.Item label="Australia" value="Australia" />
@@ -135,10 +140,19 @@ export default reduxForm({
 
 const styles = StyleSheet.create ({
   text:{
-    color:'blue'
+    width:'20%'
+  },
+  text:{
+    color:'blue',
+    width:'80%'
   },
   header:{
     marginTop:20
+  },
+  picker:{
+    height: 40, 
+    margin:8, 
+    color:'blue'
   },
   body:{
     alignItems:'center'

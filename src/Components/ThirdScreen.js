@@ -1,5 +1,5 @@
 import React , { Component } from 'react';
-import Expo from 'expo';
+import* as Expo from 'expo';
 import { View, AsyncStorage, StyleSheet } from 'react-native';
 import { Container, Item, Input, Header, Body, Content, Title, Button, Text } from 'native-base';
 import { Field,reduxForm } from 'redux-form';
@@ -65,7 +65,8 @@ class ThirdScreen extends Component {
     }
     return( 
       <Item error= {hasError}>
-        <Input secureTextEntry={secureTextEntry} {...input} placeholder={placeholder} type={type} />
+      <Text>{label}</Text>
+        <Input secureTextEntry={secureTextEntry} {...input} type={type} />
         {hasError ? <Text>{error}</Text> : <Text />}
       </Item>
     )
@@ -78,9 +79,9 @@ class ThirdScreen extends Component {
     return (
       <Container>
         <Content padder> 
-          <Field name="email" type="email" component={this.renderInput} placeholder="Email" secureTextEntry={false} />
-          <Field name="pass" type="password" component={this.renderInput} placeholder="Password" secureTextEntry={true} />
-          <Field name="confPass" type="password" component={this.renderInput} placeholder="Confirm Password" secureTextEntry={true} />
+          <Field name="email" component={this.renderInput} label="Email" secureTextEntry={false} />
+          <Field name="pass" component={this.renderInput} label="Password" secureTextEntry={true} />
+          <Field name="confPass" component={this.renderInput} label="Conf Pass" secureTextEntry={true} />
           <Button style={styles.button} block primary onPress={handleSubmit(this.formSubmit)} >
             <Text>Next</Text>
           </Button>

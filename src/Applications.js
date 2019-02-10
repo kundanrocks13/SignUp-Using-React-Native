@@ -1,18 +1,16 @@
 import React , { Component } from 'react';
-import allReducers from './Reducers/index.js';
-import {createStore} from 'redux';
+import promiseMiddleware from 'redux-promise';
 import {Provider} from 'react-redux';
 import FirstScreen from './Components/FirstScreen.js';
 import { Field, reduxForm } from 'redux-form';
 import ThirdScreen from './Components/ThirdScreen.js';
 import { StyleSheet, View, Text, Image, Button, TouchableOpacity, AsyncStorage } from 'react-native';
-//import {  Button } from 'native-base';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
-//import ImagePicker from 'react-native-image-picker';
 import { ImagePicker } from 'expo';
 import FourthScreen from './Components/FourthScreen.js';
+import store from './Reducers/index.js';
 
-const store = createStore(allReducers);
+//const store = createStore(allReducers);
 
 class SecondScreen extends React.Component {
     static navigationOptions =
@@ -114,9 +112,11 @@ const RootStack = createStackNavigator(
   export default class Applications extends React.Component {
     render() {
       return(
-        <Provider store= {store}>
+
+        <Provider store = {store}>
           <AppContainer />
         </Provider>
+       
       )
     }
   }
