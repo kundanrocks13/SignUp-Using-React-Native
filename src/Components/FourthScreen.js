@@ -61,7 +61,7 @@ class FourthScreen extends Component {
   }
 
   formSubmit = values => {
-    this.refs.toast.show('Submit Successfully', 1500, () =>{
+    this.refs.toast.show('signup success', 1500, () =>{
       this.props.navigation.navigate('Home') 
     });
   }
