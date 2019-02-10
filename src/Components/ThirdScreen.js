@@ -57,14 +57,15 @@ class ThirdScreen extends Component {
         }
     }
 
-  renderInput = ({ input, placeholder, label, type, meta: { touched, error, warning } }) => {
+  renderInput = ({ input, placeholder, label, type, secureTextEntry, meta: { touched, error, warning } }) => {
     var hasError= false;
+    
     if(error !== undefined){
       hasError= true;
     }
     return( 
       <Item error= {hasError}>
-        <Input {...input} placeholder={placeholder} type={type} />
+        <Input secureTextEntry={secureTextEntry} {...input} placeholder={placeholder} type={type} />
         {hasError ? <Text>{error}</Text> : <Text />}
       </Item>
     )
@@ -77,9 +78,9 @@ class ThirdScreen extends Component {
     return (
       <Container>
         <Content padder> 
-          <Field name="email" type="email" component={this.renderInput} placeholder="Email" />
-          <Field name="pass" type="password" component={this.renderInput} placeholder="Password" />
-          <Field name="confPass" type="password" component={this.renderInput} placeholder="Confirm Password" />
+          <Field name="email" type="email" component={this.renderInput} placeholder="Email" secureTextEntry={false} />
+          <Field name="pass" type="password" component={this.renderInput} placeholder="Password" secureTextEntry={true} />
+          <Field name="confPass" type="password" component={this.renderInput} placeholder="Confirm Password" secureTextEntry={true} />
           <Button style={styles.button} block primary onPress={handleSubmit(this.formSubmit)} >
             <Text>Next</Text>
           </Button>

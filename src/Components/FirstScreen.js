@@ -1,6 +1,6 @@
 import React , { Component } from 'react';
 import Expo from 'expo';
-import { View, AsyncStorage, StyleSheet } from 'react-native';
+import { View, AsyncStorage, StyleSheet, Picker } from 'react-native';
 import { Container, Item, Input, Header, Body, Content, Title, Button, Text } from 'native-base';
 import { Field, reduxForm  } from 'redux-form';
 import { Dropdown } from 'react-native-material-dropdown';
@@ -17,7 +17,8 @@ class FirstScreen extends Component {
         isReady: false,
         first_name:false,
         last_name:false,
-        required:''
+        required:'',
+        country:""
         };
     }
     async componentWillMount() {
@@ -36,10 +37,10 @@ class FirstScreen extends Component {
         const add = JSON.stringify(values.address);
         const city = JSON.stringify(values.city);
         const state = JSON.stringify(values.state);
-        var nameRegx = /^[A-Za-z]{3,}$/
-        var addRegx =  /^[A-Za-z\d]{8,}$/
+        var nameRegx = /^[A-Za-z ]{3,}$/
+        var addRegx =  /^[A-Za-z\d ]{5,}$/
       
-        if(name === undefined || add === undefined || city === undefined || state === undefined )
+        if(name === undefined || add === undefined || city === undefined || state === undefined || this.state.country === "" )
         {
           alert("All fields are Required")
         }
@@ -55,6 +56,7 @@ class FirstScreen extends Component {
               AsyncStorage.setItem('add',add);
               AsyncStorage.setItem('city',city);
               AsyncStorage.setItem('state',state);
+              AsyncStorage.setItem('country',this.state.country);
               this.props.navigation.navigate('ImageUpload')
             }
             else
@@ -87,25 +89,7 @@ class FirstScreen extends Component {
      if (!this.state.isReady) {
       return <Expo.AppLoading />;
     }
-    let data = [{
-        value: 'Afghanistan',
-      }, {
-        value: 'Albania',
-      }, {
-        value: 'Argentina',
-      }, {
-        value: 'Armenia',
-      }, {
-        value: 'Australia',
-      }, {
-        value: 'India',
-      }, {
-        value: 'Austria',
-      }, {
-        value: 'Iceland',
-      }, {
-        value: 'Indonesia',
-      }];
+
     return (
       
       <Container>
@@ -123,10 +107,17 @@ class FirstScreen extends Component {
             <Field name="city" component={this.renderInput} placeholder="city" />
             <Field name="state" component={this.renderInput} placeholder="state"  />
          
-          <Dropdown
-                label='Select Country'
-                data={data}
-            />
+          <Picker
+              selectedValue={this.state.country}
+              style={{ height: 40, margin:8 }}
+              itemStyle={{height: 44, color:'blue'}}
+              onValueChange={(itemValue, itemIndex) => this.setState({country: itemValue})}>
+              <Picker.Item label="Select Country" value="" />
+              <Picker.Item label="Australia" value="Australia" />
+              <Picker.Item label="Afghanistan" value="Afghanistan" />
+              <Picker.Item label="Albania" value="Albania" />
+              <Picker.Item label="Argentina" value="Argentina" />
+          </Picker>
           <Button style={styles.button} type="submit" block primary onPress={handleSubmit(this.formSubmit)}>
             <Text>Next</Text>
           </Button>
